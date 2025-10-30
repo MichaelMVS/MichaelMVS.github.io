@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Michael Sargis - Cybersecurity & Python Developer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0066ff;
+            --secondary: #00d4ff;
+            --accent: #ff6b6b;
+            --dark-bg: #0a0e27;
+            --light-bg: #ffffff;
+            --surface: #f8f9fa;
+            --text-dark: #0a0e27;
+            --text-light: #e0e0e0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: var(--light-bg);
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            overflow-x: hidden;
+        }
+
+        body.dark-mode {
+            background: var(--dark-bg);
+            color: var(--text-light);
+        }
+
+        /* Scroll Progress Indicator */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            width: 0%;
+            z-index: 9999;
+            transition: width 0.1s ease;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 1.2rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0, 102, 255, 0.1);
+            animation: slideDown 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        body.dark-mode nav {
+            background: rgba(10, 14, 39, 0.7);
+            border-bottom-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: inherit;
+            font-weight: 600;
+            position: relative;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border-radius: 2px;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .theme-toggle {
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.1), rgba(0, 212, 255, 0.1));
+            border: 2px solid rgba(0, 102, 255, 0.2);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.15) rotate(25deg);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-color: var(--primary);
+            color: white;
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 80px;
+            padding: 120px 2rem 100px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            text-align: center;
+            min-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255,255,255,0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 0%, transparent 50%);
+            pointer-events: none;
+            animation: drift 8s ease-in-out infinite;
+        }
+
+        @keyframes drift {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, 30px); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            letter-spacing: -2px;
+            line-height: 1.1;
+            min-height: 1.1em;
+        }
+
+        .typing-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1.1em;
+            background: white;
+            margin-left: 5px;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0; }
+        }
+
+        .hero .subtitle {
+            font-size: 1.4rem;
+            margin: 1rem 0 1.5rem;
+            opacity: 0.95;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            animation: fadeInUp 1s ease-out 0.5s both;
+        }
+
+        .hero-tagline {
+            font-size: 1.1rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.9;
+            font-weight: 300;
+            animation: fadeInUp 1s ease-out 0.8s both;
+        }
+
+        .stats {
+            display: flex;
+            gap: 3rem;
+            justify-content: center;
+            margin: 2rem 0 3rem;
+            flex-wrap: wrap;
+            animation: fadeInUp 1s ease-out 1s both;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            opacity: 0.85;
+            letter-spacing: 1px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            animation: fadeInUp 1s ease-out 1.1s both;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.7rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-5px);
+            border-color: white;
+        }
+
+        /* Sections */
+        section {
+            padding: 100px 2rem;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 0.85rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        section h2 {
+            font-size: 3.2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: rgba(0, 0, 0, 0.6);
+            margin-bottom: 3rem;
+            font-weight: 300;
+        }
+
+        body.dark-mode .section-subtitle {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* About Section */
+        .about {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-avatar {
+            position: relative;
+            display: flex;
+            justify-content: center;
+        }
+
+        .avatar-circle {
+            width: 320px;
+            height: 320px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 7rem;
+            box-shadow: 
+                0 40px 80px rgba(0, 102, 255, 0.3),
+                inset 0 0 40px rgba(255, 255, 255, 0.2);
+            animation: float 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .avatar-circle::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            animation: moveGrid 20s linear infinite;
+        }
+
+        @keyframes moveGrid {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(20px, 20px); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-30px) scale(1.02); }
+        }
+
+        .about-text h3 {
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 900;
+        }
+
+        .about-text p {
+            margin-bottom: 1.5rem;
+            opacity: 0.8;
+            font-size: 1.05rem;
+            line-height: 1.9;
+        }
+
+        .about-highlights {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 0.8rem 1.3rem;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            box-shadow: 0 8px 25px rgba(0, 102, 255, 0.25);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .highlight:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 12px 35px rgba(0, 102, 255, 0.4);
+        }
+
+        /* Skills Section */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .skill-category {
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.08), rgba(0, 212, 255, 0.08));
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 2px solid rgba(0, 102, 255, 0.15);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .skill-category::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            opacity: 0;
+            transition: opacity 0.4s;
+            z-index: 0;
+        }
+
+        body.dark-mode .skill-category {
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.15), rgba(0, 212, 255, 0.15));
+            border-color: rgba(0, 102, 255, 0.3);
+        }
+
+        .skill-category:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 25px 60px rgba(0, 102, 255, 0.3);
+            border-color: var(--primary);
+        }
+
+        .skill-category:hover::before {
+            opacity: 0.1;
+        }
+
+        .skill-category h3 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .skill-category i {
+            font-size: 1.6rem;
+        }
+
+        .skill-list {
+            list-style: none;
+            position: relative;
+            z-index: 1;
+        }
+
+        .skill-list li {
+            padding: 0.8rem 0 0.8rem 2rem;
+            position: relative;
+            font-weight: 500;
+            opacity: 0.9;
+            margin-bottom: 0.3rem;
+        }
+
+        .skill-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--secondary);
+            font-weight: 900;
+            font-size: 1.1rem;
+        }
+
+        /* Projects Section */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            border: 1px solid rgba(0, 102, 255, 0.1);
+        }
+
+        body.dark-mode .project-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 102, 255, 0.2);
+        }
+
+        .project-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 30px 80px rgba(0, 102, 255, 0.2);
+        }
+
+        .project-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            height: 180px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .project-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: all 0.4s;
+        }
+
+        .project-card:hover .project-header::before {
+            transform: translate(-30px, 30px);
+        }
+
+        .project-header h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .project-header p {
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+            font-size: 0.95rem;
+        }
+
+        .project-body {
+            padding: 2.5rem;
+        }
+
+        .project-body p {
+            margin-bottom: 1.5rem;
+            opacity: 0.8;
+            line-height: 1.8;
+        }
+
+        .project-tags {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .tag {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 0.5rem 1.1rem;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(0, 102, 255, 0.2);
+        }
+
+        .project-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .project-links a {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.15), rgba(0, 212, 255, 0.15));
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+        }
+
+        .project-links a:hover {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0, 102, 255, 0.3);
+        }
+
+        /* Blog Section */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .blog-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(0, 102, 255, 0.1);
+        }
+
+        body.dark-mode .blog-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 102, 255, 0.2);
+        }
+
+        .blog-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 30px 80px rgba(0, 102, 255, 0.2);
+        }
+
+        .blog-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .blog-header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -30px;
+            width: 120px;
+            height: 120px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .blog-icon {
+            font-size: 2.5rem;
+            opacity: 0.85;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .blog-date {
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 700;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .blog-content {
+            padding: 2rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .blog-card h3 {
+            margin-bottom: 0.8rem;
+            color: inherit;
+            font-size: 1.2rem;
+            font-weight: 900;
+        }
+
+        .blog-card p {
+            opacity: 0.8;
+            margin-bottom: 1.2rem;
+            flex: 1;
+            line-height: 1.7;
+        }
+
+        .read-more {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .read-more:hover {
+            gap: 1rem;
+            color: var(--secondary);
+        }
+
+        /* Contact Section */
+        .contact-container {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .contact-container > p {
+            font-size: 1.15rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.8;
+            line-height: 1.9;
+        }
+
+        .contact-links {
+            display: flex;
+            gap: 2.5rem;
+            justify-content: center;
+            margin-bottom: 3.5rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            padding: 2rem;
+            border-radius: 15px;
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.08), rgba(0, 212, 255, 0.08));
+            border: 2px solid transparent;
+        }
+
+        .contact-link:hover {
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.2), rgba(0, 212, 255, 0.2));
+            transform: translateY(-8px);
+            border-color: var(--primary);
+        }
+
+        .contact-link .icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 0.8rem;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .contact-link:hover .icon {
+            color: var(--secondary);
+            transform: scale(1.2) rotate(5deg);
+        }
+
+        .contact-link-text {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .contact-form {
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.08), rgba(0, 212, 255, 0.08));
+            padding: 3rem;
+            border-radius: 20px;
+            border: 2px solid rgba(0, 102, 255, 0.15);
+            box-shadow: 0 20px 60px rgba(0, 102, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 13px 16px;
+            border: 2px solid rgba(0, 102, 255, 0.2);
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 1rem;
+            background: white;
+            color: var(--text-dark);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        body.dark-mode .form-group input,
+        body.dark-mode .form-group textarea {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(0, 102, 255, 0.3);
+            background: white;
+        }
+
+        body.dark-mode .form-group input:focus,
+        body.dark-mode .form-group textarea:focus {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 10px 30px rgba(0, 102, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.7rem;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 102, 255, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.1), rgba(0, 212, 255, 0.08));
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top: 2px solid rgba(0, 102, 255, 0.2);
+        }
+
+        footer p {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            font-weight: 600;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 1.2rem;
+                font-size: 0.85rem;
+            }
+
+            .hero {
+                padding: 100px 1.5rem 80px;
+            }
+
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1.2rem;
+            }
+
+            .stats {
+                gap: 1.5rem;
+            }
+
+            .about {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .avatar-circle {
+                width: 250px;
+                height: 250px;
+                font-size: 5rem;
+            }
+
+            section {
+                padding: 60px 1.5rem;
+            }
+
+            section h2 {
+                font-size: 2.2rem;
+            }
+
+            .contact-links {
+                gap: 1.5rem;
+            }
+
+            .contact-link {
+                padding: 1.5rem;
+            }
+
+            .contact-form {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Scroll Progress -->
+    <div class="scroll-progress"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo"><i class="fas fa-shield-alt"></i>Michael</div>
+        <ul class="nav-links">
+            <li><a href="#about"><i class="fas fa-user"></i> About</a></li>
+            <li><a href="#skills"><i class="fas fa-code"></i> Skills</a></li>
+            <li><a href="#projects"><i class="fas fa-rocket"></i> Projects</a></li>
+            <li><a href="#blog"><i class="fas fa-pen-fancy"></i> Blog</a></li>
+            <li><a href="#contact"><i class="fas fa-envelope"></i> Contact</a></li>
+        </ul>
+        <button class="theme-toggle" id="themeToggle">🌙</button>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 id="heroTitle"></h1>
+            <p class="subtitle">Cybersecurity Enthusiast & Python Developer</p>
+            <p class="hero-tagline">Building secure systems • Exploring ethical hacking • Developing tomorrow's defenders</p>
+            
+            <div class="stats">
+                <div class="stat">
+                    <span class="stat-number" data-count="5">0</span>
+                    <span class="stat-label">Projects</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" data-count="3">0</span>
+                    <span class="stat-label">Skills Areas</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" data-count="100">0</span>
+                    <span class="stat-label">% Passion</span>
+                </div>
+            </div>
+
+            <div class="cta-buttons">
+                <a href="#projects" class="btn btn-primary"><i class="fas fa-laptop-code"></i> View My Work</a>
+                <a href="#contact" class="btn btn-secondary"><i class="fas fa-arrow-right"></i> Let's Talk</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <div style="margin-bottom: 2rem;">
+            <span class="section-label">Who I Am</span>
+            <h2>About Me</h2>
+            <p class="section-subtitle">Passionate about crafting secure code and understanding systems from the ground up</p>
+        </div>
+        
+        <div class="about">
+            <div class="about-avatar">
+                <div class="avatar-circle">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+            </div>
+            <div class="about-text">
+                <h3>Security-First Developer</h3>
+                <p>
+                    I'm a high school student deeply interested in cybersecurity and ethical hacking. My journey into tech started with Python, where I discovered my passion for understanding how systems work and, more importantly, how to secure them from potential threats.
+                </p>
+                <p>
+                    Through hands-on projects and continuous learning, I'm building a strong foundation in both offensive and defensive cybersecurity. I believe that security should be built into every layer of development.
+                </p>
+                <div class="about-highlights">
+                    <span class="highlight"><i class="fas fa-lock"></i> Cybersecurity</span>
+                    <span class="highlight"><i class="fas fa-python"></i> Python</span>
+                    <span class="highlight"><i class="fas fa-shield-alt"></i> Ethical Hacking</span>
+                    <span class="highlight"><i class="fas fa-network-wired"></i> Networks</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills">
+        <div style="margin-bottom: 2rem;">
+            <span class="section-label">Technical Arsenal</span>
+            <h2>Skills & Expertise</h2>
+            <p class="section-subtitle">Mastering the tools and technologies of cybersecurity</p>
+        </div>
+        <div class="skills-grid">
+            <div class="skill-category">
+                <h3><i class="fas fa-code"></i> Programming Languages</h3>
+                <ul class="skill-list">
+                    <li>Python (Expert)</li>
+                    <li>JavaScript & Web Stack</li>
+                    <li>Java & C++</li>
+                    <li>Bash & Shell Scripting</li>
+                </ul>
+            </div>
+
+            <div class="skill-category">
+                <h3><i class="fas fa-lock-open"></i> Cybersecurity</h3>
+                <ul class="skill-list">
+                    <li>Network Security</li>
+                    <li>Penetration Testing</li>
+                    <li>Cryptography</li>
+                    <li>Vulnerability Analysis</li>
+                </ul>
+            </div>
+
+            <div class="skill-category">
+                <h3><i class="fas fa-tools"></i> Security Tools</h3>
+                <ul class="skill-list">
+                    <li>Wireshark & tcpdump</li>
+                    <li>Burp Suite & OWASP</li>
+                    <li>Metasploit Framework</li>
+                    <li>Git & Linux Terminal</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects">
+        <div style="margin-bottom: 2rem;">
+            <span class="section-label">Recent Work</span>
+            <h2>Featured Projects</h2>
+            <p class="section-subtitle">Innovative solutions in cybersecurity and web development</p>
+        </div>
+        <div class="projects-grid">
+            <div class="project-card">
+                <div class="project-header">
+                    <h3><i class="fas fa-shield-alt"></i> Password Security Analyzer</h3>
+                    <p>Python-based security tool</p>
+                </div>
+                <div class="project-body">
+                    <p>
+                        A comprehensive tool that analyzes password security and provides real-time recommendations. Implements industry-standard practices to educate users on cybersecurity best practices.
+                    </p>
+                    <div class="project-tags">
+                        <span class="tag">Python</span>
+                        <span class="tag">Security</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://github.com/MichaelMVS/password-analyzer" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+                        <a href="https://github.com/MichaelMVS/password-analyzer" target="_blank"><i class="fas fa-external-link"></i> Details</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <h3><i class="fas fa-globe"></i> Greatsword V2 Unblocker</h3>
+                    <p>Advanced web browser</p>
+                </div>
+                <div class="project-body">
+                    <p>
+                        An advanced unblocker browser demonstrating deep understanding of web technologies, proxy systems, and security mechanisms. Features CAPTCHA support and innovative cloaking techniques.
+                    </p>
+                    <div class="project-tags">
+                        <span class="tag">Web Dev</span>
+                        <span class="tag">JavaScript</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://github.com/MichaelMVS/Greatsword-V2" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+                        <a href="https://github.com/MichaelMVS/Greatsword-V2" target="_blank"><i class="fas fa-star"></i> Popular</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <h3><i class="fas fa-lock"></i> Security Research Lab</h3>
+                    <p>Ongoing cybersecurity exploration</p>
+                </div>
+                <div class="project-body">
+                    <p>
+                        Active development in cybersecurity research and tool creation. Exploring penetration testing techniques, vulnerability assessment, and security automation with ethical hacking practices.
+                    </p>
+                    <div class="project-tags">
+                        <span class="tag">Research</span>
+                        <span class="tag">Security</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://github.com/MichaelMVS" target="_blank"><i class="fab fa-github"></i> Profile</a>
+                        <a href="https://github.com/MichaelMVS" target="_blank"><i class="fas fa-code"></i> Explore</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section id="blog">
+        <div style="margin-bottom: 2rem;">
+            <span class="section-label">Insights & Stories</span>
+            <h2>Blog & Articles</h2>
+            <p class="section-subtitle">Sharing knowledge and experiences in cybersecurity</p>
+        </div>
+        <div class="blog-grid">
+            <div class="blog-card">
+                <div class="blog-header">
+                    <div class="blog-icon"><i class="fas fa-lock"></i></div>
+                    <div>
+                        <div class="blog-date">January 2025</div>
+                    </div>
+                </div>
+                <div class="blog-content">
+                    <h3>Getting Started with Cybersecurity</h3>
+                    <p>
+                        A comprehensive guide to understanding cybersecurity fundamentals, essential tools, best practices, and resources to start your secure journey in this dynamic field.
+                    </p>
+                    <a href="#" class="read-more"><i class="fas fa-arrow-right"></i> Read More</a>
+                </div>
+            </div>
+
+            <div class="blog-card">
+                <div class="blog-header">
+                    <div class="blog-icon"><i class="fas fa-python"></i></div>
+                    <div>
+                        <div class="blog-date">January 2025</div>
+                    </div>
+                </div>
+                <div class="blog-content">
+                    <h3>Why Python Powers Security</h3>
+                    <p>
+                        Exploring why Python is the go-to language for cybersecurity professionals and how you can leverage it to build powerful security automation and tools.
+                    </p>
+                    <a href="#" class="read-more"><i class="fas fa-arrow-right"></i> Read More</a>
+                </div>
+            </div>
+
+            <div class="blog-card">
+                <div class="blog-header">
+                    <div class="blog-icon"><i class="fas fa-lightbulb"></i></div>
+                    <div>
+                        <div class="blog-date">December 2024</div>
+                    </div>
+                </div>
+                <div class="blog-content">
+                    <h3>Building Security Tools</h3>
+                    <p>
+                        My journey creating the Password Security Analyzer: the challenges faced, solutions implemented, and lessons learned in building impactful security tools.
+                    </p>
+                    <a href="#" class="read-more"><i class="fas fa-arrow-right"></i> Read More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <div style="margin-bottom: 2rem;">
+            <span class="section-label">Let's Connect</span>
+            <h2>Get In Touch</h2>
+            <p class="section-subtitle">Interested in cybersecurity collaboration? Let's build something secure together</p>
+        </div>
+        
+        <div class="contact-container">
+            <p>
+                I'm always excited to discuss cybersecurity opportunities, collaborate on projects, or share knowledge. Feel free to reach out—whether it's a security question, project opportunity, or just a friendly hello!
+            </p>
+
+            <div class="contact-links">
+                <a href="https://github.com/MichaelMVS" class="contact-link" target="_blank">
+                    <div class="icon"><i class="fab fa-github"></i></div>
+                    <div class="contact-link-text">GitHub</div>
+                </a>
+                <a href="https://www.linkedin.com/in/michael-s-43aaab390/" class="contact-link" target="_blank">
+                    <div class="icon"><i class="fab fa-linkedin"></i></div>
+                    <div class="contact-link-text">LinkedIn</div>
+                </a>
+                <a href="mailto:michael.sargis@example.com" class="contact-link">
+                    <div class="icon"><i class="fas fa-envelope"></i></div>
+                    <div class="contact-link-text">Email</div>
+                </a>
+            </div>
+
+            <div class="contact-form">
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label for="name"><i class="fas fa-user"></i> Your Name</label>
+                        <input type="text" id="name" name="name" placeholder="John Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email"><i class="fas fa-envelope"></i> Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="john@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message"><i class="fas fa-comment"></i> Message</label>
+                        <textarea id="message" name="message" placeholder="Tell me about your project or question..." required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn"><i class="fas fa-paper-plane"></i> Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p><i class="fas fa-copyright"></i> 2025 Michael Sargis. Built with <i class="fas fa-heart" style="color: #ff6b6b;"></i> and security in mind.</p>
+    </footer>
+
+    <script>
+        // Typing effect for hero title
+        const heroTitle = document.getElementById('heroTitle');
+        const fullText = 'Michael Sargis';
+        let index = 0;
+
+        function typeWriter() {
+            if (index < fullText.length) {
+                heroTitle.textContent += fullText.charAt(index);
+                index++;
+                setTimeout(typeWriter, 80);
+            } else {
+                // Add cursor
+                const cursor = document.createElement('span');
+                cursor.className = 'typing-cursor';
+                heroTitle.appendChild(cursor);
+                
+                // Remove cursor after 2 seconds
+                setTimeout(() => {
+                    cursor.style.animation = 'none';
+                    cursor.style.opacity = '0';
+                }, 2000);
+            }
+        }
+
+        typeWriter();
+
+        // Counter animation
+        const observerOptions = {
+            threshold: 0.5,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const statNumbers = entry.target.querySelectorAll('[data-count]');
+                    statNumbers.forEach(stat => {
+                        const finalCount = parseInt(stat.dataset.count);
+                        let currentCount = 0;
+                        const increment = Math.ceil(finalCount / 50);
+
+                        const counter = setInterval(() => {
+                            currentCount += increment;
+                            if (currentCount >= finalCount) {
+                                currentCount = finalCount;
+                                clearInterval(counter);
+                            }
+                            stat.textContent = currentCount;
+                        }, 30);
+                    });
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        const statsSection = document.querySelector('.stats');
+        if (statsSection) {
+            observer.observe(statsSection);
+        }
+
+        // Scroll progress indicator
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrolled = (scrollTop / docHeight) * 100;
+            document.querySelector('.scroll-progress').style.width = scrolled + '%';
+        });
+
+        // Dark Mode Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+
+        const currentTheme = localStorage.getItem('theme') || 'light-mode';
+        if (currentTheme === 'dark-mode') {
+            body.classList.add('dark-mode');
+            themeToggle.textContent = '☀️';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            const theme = body.classList.contains('dark-mode') ? 'dark-mode' : 'light-mode';
+            localStorage.setItem('theme', theme);
+            themeToggle.textContent = theme === 'dark-mode' ? '☀️' : '🌙';
+        });
+
+        // Smooth Scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href !== '#' && document.querySelector(href)) {
+                    e.preventDefault();
+                    document.querySelector(href).scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Contact Form Handler
+        const contactForm = document.getElementById('contactForm');
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(contactForm);
+            const name = formData.get('name');
+            const email = formData.get('email');
+
+            alert(`Thank you ${name}! Your message has been received. I'll get back to you at ${email} soon!`);
+            contactForm.reset();
+        });
+
+        // Staggered animation for elements
+        const animatedElements = document.querySelectorAll('.skill-category, .project-card, .blog-card');
+        
+        const elementObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = `scaleIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) ${index * 0.1}s both`;
+                    elementObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        animatedElements.forEach(el => {
+            el.style.opacity = '0';
+            elementObserver.observe(el);
+        });
+
+        // Parallax effect on scroll
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallaxElements = document.querySelectorAll('[data-parallax]');
+            parallaxElements.forEach(el => {
+                el.style.transform = `translateY(${scrolled * 0.5}px)`;
+            });
+        });
+    </script>
+</body>
+</html>
