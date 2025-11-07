@@ -1,3 +1,37 @@
+// Theme Toggle
+function toggleTheme() {
+    const body = document.body;
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = themeToggle.querySelector('.theme-icon');
+    
+    body.classList.toggle('light-mode');
+    
+    // Update icon
+    if (body.classList.contains('light-mode')) {
+        themeIcon.textContent = '☀️';
+        localStorage.setItem('theme', 'light');
+    } else {
+        themeIcon.textContent = '🌙';
+        localStorage.setItem('theme', 'dark');
+    }
+}
+
+// Load saved theme preference on page load
+document.addEventListener('DOMContentLoaded', () => {
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    const body = document.body;
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = themeToggle.querySelector('.theme-icon');
+    
+    if (savedTheme === 'light') {
+        body.classList.add('light-mode');
+        themeIcon.textContent = '☀️';
+    } else {
+        body.classList.remove('light-mode');
+        themeIcon.textContent = '🌙';
+    }
+});
+
 // Boot Screen Animation
 document.addEventListener('DOMContentLoaded', () => {
     const bootScreen = document.getElementById('bootScreen');
